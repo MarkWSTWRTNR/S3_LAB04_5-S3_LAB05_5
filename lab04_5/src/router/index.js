@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import EventDetails from '../views/EventDetailView.vue'
+import EventDetails from '../views/event/EventDetail.vue'
+import EventLayout from '../views/event/EventLayout.vue'
 const routes = [
   {
     path: '/',
@@ -20,11 +21,20 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
+
   {
     path: '/passenger/:id',
-    name: 'EventDetails',
-    component: EventDetails,
-    props: true
+    name: 'EventLayout',
+    props: true,
+    component: EventLayout,
+    children: [
+      {
+        path: '',
+        name: 'EventDetails',
+        component: EventDetails,
+        props: true
+      }
+    ]
   }
 ]
 
