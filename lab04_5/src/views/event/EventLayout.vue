@@ -1,15 +1,11 @@
 <template>
   <div v-if="passenger">
     <div id="nav">
-      <router-link :to="{ name: 'EventDetails', params: { id } }"
-        >Details</router-link
-      >
+      <router-link :to="{ name: 'EventDetails' }">Details</router-link>
       |
-      <!-- <router-link :to="{ name: 'EventRegister', params: { id } }"
-        >Register</router-link
-      > -->
+      <router-link :to="{ name: 'airlines' }">Airlines</router-link>
     </div>
-    <router-view :passenger="passenger" />
+    <router-view :passenger="passenger" :airline="airline" />
   </div>
 </template>
 <script>
@@ -18,7 +14,8 @@ export default {
   props: ['id'],
   data() {
     return {
-      passenger: null
+      passenger: null,
+      airline: null
     }
   },
   created() {
@@ -35,7 +32,21 @@ export default {
         } else {
           this.$router.push({ name: 'NetworkError' })
         }
-      })
+      }),
+      EventService.getAirline(this.id)
+        .then((response) => {
+          this.airline = response.data
+        })
+        .catch((error) => {
+          if (error.response && error.response.status == 404) {
+            this.$router.push({
+              name: '404Resource',
+              params: { resource: 'airline' }
+            })
+          } else {
+            this.$router.push({ name: 'NetworkError' })
+          }
+        })
   }
 }
 </script>

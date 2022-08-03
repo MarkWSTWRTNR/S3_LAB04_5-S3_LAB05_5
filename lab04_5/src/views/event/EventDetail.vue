@@ -1,7 +1,7 @@
 <template>
-  <h1>{{ passenger.gender }}</h1>
+  <h1>Name:{{ passenger.first_name }} {{ passenger.last_name }}</h1>
   <p>
-    {{ passenger.ip_address }} on {{ passenger.Source }} @
+    address: {{ passenger.ip_address }} on {{ passenger.Source }} @
     {{ passenger.Destination }}
   </p>
   <p>{{ passenger.travelDate }}</p>
