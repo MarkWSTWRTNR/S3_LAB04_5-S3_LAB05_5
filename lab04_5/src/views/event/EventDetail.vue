@@ -5,9 +5,20 @@
     {{ passenger.Destination }}
   </p>
   <p>{{ passenger.travelDate }}</p>
+  <button @click="detail">Update the passenger</button>
 </template>
 <script>
 export default {
-  props: ['passenger']
+  props: ['passenger'],
+  inject: ['GStore'],
+  methods: {
+    detail() {
+      this.GStore.flashMessage = 'You are successfully edited details '
+      setTimeout(() => {
+        //After 3 seconds remove it
+        this.GStore.flashMessage = ''
+      }, 3000)
+    }
+  }
 }
 </script>
