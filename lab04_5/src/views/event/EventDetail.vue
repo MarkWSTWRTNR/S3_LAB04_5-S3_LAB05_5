@@ -17,7 +17,10 @@ export default {
       setTimeout(() => {
         //After 3 seconds remove it
         this.GStore.flashMessage = ''
-      }, 3000)
+      }, 5000)
+      this.$router.push({
+        name: 'home'
+      })
     }
   }
 }
