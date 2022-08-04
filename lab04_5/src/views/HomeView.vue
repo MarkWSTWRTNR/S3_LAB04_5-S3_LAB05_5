@@ -34,7 +34,7 @@
 
 <script>
 // @ is an alias to /src
-import { watchEffect } from '@vue/runtime-core'
+
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/service/EventService'
 
@@ -59,26 +59,52 @@ export default {
       totalPassengers: 0 //<--- Added this to store totalEvents
     }
   },
-  created() {
-    // EventService.getEvents(2, this.page)
-    //   .then((response) => {
-    //     this.events = response.data
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
-    watchEffect(() => {
-      EventService.getPassengers(this.perPage, this.page)
-        .then((response) => {
-          this.passengers = response.data
-          this.totalPassengers = response.headers['x-total-count'] //<--- Store it
-          // console.log(this.totalEvents)
-          // console.log(this.perPage)
+  // created() {
+  // EventService.getEvents(2, this.page)
+  //   .then((response) => {
+  //     this.events = response.data
+  //   })
+  //   .catch((error) => {
+  //     console.log(error)
+  //   })
+  //-------------
+  /*watchEffect(() => {
+    EventService.getPassengers(this.perPage, this.page)
+      .then((response) => {
+        this.passengers = response.data
+        this.totalPassengers = response.headers['x-total-count'] //<--- Store it
+        // console.log(this.totalEvents)
+        // console.log(this.perPage)
+      })
+      .catch((error) => {
+        console.log(error)
+      })*/
+  //-----------
+  //eslint-disable-next-line no-unused-vars
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    EventService.getPassengers(3, parseInt(routeTo.query.page) || 1)
+      .then((response) => {
+        next((comp) => {
+          comp.passengers = response.data
+          comp.totalPassengers = response.headers['x-total-count']
         })
-        .catch((error) => {
-          console.log(error)
-        })
-    })
+      })
+      .catch(() => {
+        next({ name: 'NetworkError' })
+      })
+  },
+  beforeRouteUpdate(routeTo, routeFrom, next) {
+    EventService.getPassengers(3, parseInt(routeTo.query.page) || 1)
+      .then((response) => {
+        this.passengers = response.data
+        this.totalPassengers = response.headers['x-total-count']
+        next()
+      })
+      .catch(() => {
+        next({ name: 'NetworkError' })
+      })
+
+    // })
   },
   computed: {
     hasNextPage() {
