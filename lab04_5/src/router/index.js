@@ -34,22 +34,40 @@ const routes = [
     component: EventLayout,
     beforeEnter: (to) => {
       //<-- put API call here
-      return EventService.getPassenger(to.params.id) //return and params.id
-        .then((response) => {
-          //still need to set the data here
-          GStore.passenger = response.data
-        })
-        .catch((error) => {
-          if (error.response && error.response.status == 404) {
-            return {
-              //<---Return
-              name: '404Resource',
-              params: { resource: 'passenger' }
+      return (
+        EventService.getPassenger(to.params.id) //return and params.id
+          .then((response) => {
+            //still need to set the data here
+            GStore.passenger = response.data
+          })
+          .catch((error) => {
+            if (error.response && error.response.status == 404) {
+              return {
+                //<---Return
+                name: '404Resource',
+                params: { resource: 'passenger' }
+              }
+            } else {
+              return { name: 'NetworkError' }
             }
-          } else {
-            return { name: 'NetworkError' }
-          }
-        })
+          }),
+        EventService.getAirline(to.params.id) //return and params.id
+          .then((response) => {
+            //still need to set the data here
+            GStore.airline = response.data
+          })
+          .catch((error) => {
+            if (error.response && error.response.status == 404) {
+              return {
+                //<---Return
+                name: '404Resource',
+                params: { resource: 'passenger' }
+              }
+            } else {
+              return { name: 'NetworkError' }
+            }
+          })
+      )
     },
     children: [
       {

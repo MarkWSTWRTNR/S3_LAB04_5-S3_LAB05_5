@@ -5,7 +5,7 @@
       |
       <router-link :to="{ name: 'airlines' }">Airlines</router-link>
     </div>
-    <router-view :passenger="GStore.passenger" :airline="airline" />
+    <router-view :passenger="GStore.passenger" :airline="GStore.airline" />
   </div>
 </template>
 <script>
